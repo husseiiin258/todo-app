@@ -1,0 +1,13 @@
+{
+  "to_do_list" : "To DO List" ,
+  "add_new_task" : "Add New Task" ,
+  "enter_your_task_title" : "Enter Your Task Title" ,
+  "enter_your_task_description" : "Enter Your Task Description" ,
+  "select_time" : "Select Time" ,
+  "add_task" : "Add Task" ,
+  "settings" : "Settings" ,
+  "theme_mode" : "Theme Mode" ,
+  "language" : "Language" ,
+  "dark" : "Dark" ,
+  "light":"Light"
+}

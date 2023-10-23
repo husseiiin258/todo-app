@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'layout/home_layout.dart';
+import 'package:todo/login/login_screen.dart';
+import 'package:todo/register/register_screen.dart';
+import 'home/home_layout.dart';
 
 class SplashScreen extends StatelessWidget {
   static const String routeName = "splash-screen";
@@ -13,28 +15,17 @@ class SplashScreen extends StatelessWidget {
 
     Timer(
         const Duration(
-          seconds: 10,
+          seconds: 4,
         ), () {
-      Navigator.pushReplacementNamed(context, HomeLayout.routeName);
+      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
     });
     return Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(
+      body:  Image.asset(
 
-            "assets/images/splash.png",
-            width: mediaQuery.width,
-            height: mediaQuery.height,
-            fit: BoxFit.contain,
-          ),
-          Image.asset(
-
-            "assets/images/Group 23.png",
-            width: mediaQuery.width,
-            height: mediaQuery.height,
-            fit: BoxFit.contain,
-          ),
-        ],
+        "assets/images/splash.png",
+        width: mediaQuery.width,
+        height: mediaQuery.height,
+        fit: BoxFit.contain,
       ),
     );
   }

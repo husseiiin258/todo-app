@@ -1,0 +1,13 @@
+{
+  "to_do_list" : "قائمة المهام" ,
+  "add_new_task" : "اضف مهمة جديدة" ,
+  "enter_your_task_title" : "ادخل عنوان المهمة" ,
+  "enter_your_task_description" : "ادخل تعريف المهمة" ,
+  "select_time" : "اختر التاريخ" ,
+  "add_task" : "اضف المهمة" ,
+  "settings" : "الاعدادات" ,
+  "theme_mode" : "نوع الاضائة" ,
+  "language" : "اللغة" ,
+  "dark" : "ليلي" ,
+  "light":"نهاري"
+}
