@@ -29,8 +29,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       padding: EdgeInsets.all(12),
       child: Column(
         children: [
-          Text(
-            "Add New Task",
+          Text(appProvider.currentLocale == "en" ?
+          "Add New Task" : "أضف مهمة جديدة" ,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           Form(
@@ -50,7 +50,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(hintText: 'Enter Task Title'),
+                      decoration: InputDecoration(hintText: appProvider.currentLocale == "en" ? 'Enter Task Title' : "عنوان المهمة"),
                     ),
                   ),
                   Padding(
@@ -66,14 +66,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         return null;
                       },
                       decoration:
-                          InputDecoration(hintText: 'Enter Task Description'),
+                          InputDecoration(hintText:appProvider.currentLocale == "en" ?  'Enter Task Description' : "تعريف المهمة"),
                       maxLines: 4,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Select Date",
+                    child: Text(appProvider.currentLocale == "en" ?
+                    "Select Date": "اختر التاريخ",
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
@@ -120,20 +120,28 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     }
   }
 
-  void addTask() {
+  Future<void> addTask() async {
     if (formKey.currentState?.validate() == true) {
     selectedDate =  DateTime(selectedDate.year,selectedDate.month,selectedDate.day);
 
-      Task task = Task(
+    var task = Task(
           title: title,
           description: description,
-          dateTime: selectedDate);
-      FirebaseUtile.addTaskToFirebase(task).timeout(Duration(milliseconds: 500),
-          onTimeout: () {
-        print("to do added successfully");
-        listProvider.getAllTasksFromFireStore(dateTime: selectedDate);
-        Navigator.pop(context);
-      });
+          dateTime: selectedDate,
+      isDone: false);
+    await  FirebaseUtile.addTaskToFirebase(task);
+
+    await listProvider.getAllTasksFromFireStore(dateTime: selectedDate);
+
+    Navigator.pop(context);
+      //
+      //     .timeout(Duration(milliseconds: 500),
+      //     onTimeout: () async {
+      //   print("to do added successfully");
+      //  await listProvider.getAllTasksFromFireStore(dateTime: selectedDate);
+      //  print("enterrr");
+      //   Navigator.pop(context);
+      // });
     }
   }
 }

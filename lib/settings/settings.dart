@@ -21,7 +21,7 @@ class SettingsTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(left: 20 , top: 40 , right: 20),
+            padding: EdgeInsets.only(left: 20 , top: 45 , right: 20),
             height: mediaQuery.height*0.23,
             color: theme.primaryColor,
             width:mediaQuery.width ,

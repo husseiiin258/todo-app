@@ -1,11 +1,15 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/firebase_util.dart';
 
 import 'package:todo/my_theme.dart';
 import 'package:todo/providers/list_provider.dart';
 import 'package:todo/task-list/task%20widget.dart';
+
+import '../model/task.dart';
 
 class TaskListTab extends StatefulWidget {
   @override
@@ -31,21 +35,21 @@ class _TaskListTabState extends State<TaskListTab> {
           alignment: Alignment.bottomCenter,
           children: [
             Container(
-              padding: EdgeInsets.only(left: 20 , top: 30 , right: 20),
-              height: mediaQuery.height*0.27,
+              padding: EdgeInsets.only(left: 20 , top: 45 , right: 20),
+              height: mediaQuery.height*0.30,
               color: theme.primaryColor,
               width:mediaQuery.width ,
             child: Text(locale.to_do_list, style: theme.textTheme.bodyLarge,),),
             Positioned(
 
-                height: 30,
+                height: mediaQuery.width*0.1,
                 width: mediaQuery.width,
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   color:appProvider.isDark()?MyTheme.backgroundDark :MyTheme.backgroundLight,
                 )),
             Positioned(
-              top: 120,
+              top: 125,
               width: mediaQuery.width,
 
 
@@ -75,13 +79,36 @@ class _TaskListTabState extends State<TaskListTab> {
 
 
         Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return TaskWidget(task: listProvider.tasklist[index]);
-            },
-            itemCount: listProvider.tasklist.length,
-          ),
-        )
+            child: StreamBuilder<QuerySnapshot<Task>>(
+                stream: FirebaseUtile.getRealTimeDataFromFireStore(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(snapshot.error.toString()),
+                        const SizedBox(height: 20),
+                        IconButton(onPressed: () {}, icon: Icon(Icons.refresh))
+                      ],
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: theme.primaryColor,
+                      ),
+                    );
+                  }
+                  var tasksList =
+                      snapshot.data?.docs.map((e) => e.data()).toList() ?? [];
+                  return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) =>
+                        TaskWidget(task:tasksList[index]),
+                    itemCount: tasksList.length,
+                  );
+                  }),
+            )
       ],
     );
   }

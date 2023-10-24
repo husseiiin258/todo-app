@@ -10,7 +10,7 @@ class ListProvider extends ChangeNotifier {
   DateTime selectedDate = DateTime.now();
   String currentLocale = "en";
   ThemeMode currentTheme = ThemeMode.light;
-  bool isDone = false ;
+
 
   changeTheme(ThemeMode newTheme) {
     if (currentTheme == newTheme) return;
@@ -31,7 +31,7 @@ class ListProvider extends ChangeNotifier {
     return isDark() ? "assets/images/bg.png" : "assets/images/background.png";
   }
 
-  void getAllTasksFromFireStore({required DateTime dateTime}) async {
+  Future<void> getAllTasksFromFireStore({required DateTime dateTime}) async {
     selectedDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
    print(selectedDate.microsecondsSinceEpoch);
     print(selectedDate);
@@ -48,9 +48,7 @@ class ListProvider extends ChangeNotifier {
     notifyListeners();
     isCall = true;
   }
-  doneTask(bool done) {
-    if (isDone == done) return;
-    isDone = done;
-    notifyListeners();
-  }
+
+
+
 }

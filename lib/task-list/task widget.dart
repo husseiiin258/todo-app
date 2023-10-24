@@ -7,6 +7,7 @@ import 'package:todo/providers/list_provider.dart';
 
 import '../model/task.dart';
 
+
 class TaskWidget extends StatefulWidget {
   Task task;
   bool isDone=false;
@@ -24,6 +25,7 @@ class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
     var listProvider = Provider.of<ListProvider>(context);
+    var appProvider = Provider.of<ListProvider>(context);
     var theme = Theme.of(context);
     return Container(
       margin: EdgeInsets.all(12),
@@ -37,17 +39,14 @@ class _TaskWidgetState extends State<TaskWidget> {
                 topLeft: Radius.circular(15),
                 bottomLeft: Radius.circular(15),
               ),
-              onPressed: (context) {
-                FirebaseUtile.deleteTaskFromFireStore(widget.task)
-                    .timeout(Duration(milliseconds: 500), onTimeout: () {
-                  print("task deleted successfully ");
-                  // listProvider.getAllTasksFromFireStore();
-                });
+              onPressed: (context) async{
+                await FirebaseUtile.deleteTaskFromFireStore(widget.task);
+
               },
               backgroundColor: MyTheme.redColor,
               foregroundColor: Colors.white,
               icon: Icons.delete,
-              label: 'Delete',
+              label: appProvider.currentLocale == "en" ?  'Delete' : "حذف",
             ),
           ],
         ),
@@ -60,7 +59,7 @@ class _TaskWidgetState extends State<TaskWidget> {
             children: [
               Container(
                 margin: EdgeInsets.only(top: 15, bottom: 15),
-                color: Theme.of(context).primaryColor,
+                color: widget.task.isDone!?MyTheme.greenLight :Theme.of(context).primaryColor,
                 height: 70,
                 width: 4,
               ),
@@ -76,7 +75,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
-                            ?.copyWith(color: Theme.of(context).primaryColor),
+                            ?.copyWith(color: widget.task.isDone!? MyTheme.greenLight : Theme.of(context).primaryColor),
                       ),
                     ),
                     Container(
@@ -87,11 +86,24 @@ class _TaskWidgetState extends State<TaskWidget> {
                   ],
                 ),
               ),
-              GestureDetector(
+              InkWell(
                 onTap: (){
 
+                  FirebaseUtile.isDone(widget.task);
+                  setState(() {
+
+                  });
+
                 },
-                child: Container(
+                child: widget.task.isDone? Container(
+                  margin: EdgeInsets.only(right: 10 , left: 10),
+                  child: Text(appProvider.currentLocale == "en" ?"Done!" : "تم" , style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green
+                  ),),
+                ) :
+                Container(
                   padding: EdgeInsets.symmetric(horizontal: 21, vertical: 7),
                   decoration: BoxDecoration(
                       color:  Theme.of(context).primaryColor ,

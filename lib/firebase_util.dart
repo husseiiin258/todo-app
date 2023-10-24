@@ -12,16 +12,30 @@ class FirebaseUtile {
             toFirestore: (task, option) => task.toFireStore());
   }
 
-  static Future<void> addTaskToFirebase(Task task) {
+  static Future<void> addTaskToFirebase(Task task) async {
     var taskCollection = getTaskCollection();
     var taskDocRef = taskCollection.doc();
     task.id = taskDocRef.id;
-    return taskDocRef.set(task);
+    return await taskDocRef.set(task);
   }
 
 
 
   static Future<void> deleteTaskFromFireStore(Task task) {
-    return getTaskCollection().doc(task.id).delete();
+    var collectionRef = getTaskCollection();
+    return collectionRef.doc(task.id).delete();
+  }
+
+
+  static Future<void> isDone(Task task)async{
+     getTaskCollection().doc(task.id).update({"isDone" : !task.isDone!
+
+     });
+  }
+
+
+  static Stream<QuerySnapshot<Task>> getRealTimeDataFromFireStore(){
+    var snapshot = getTaskCollection().snapshots();
+    return snapshot;
   }
 }

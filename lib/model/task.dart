@@ -6,13 +6,13 @@ class Task{
   String? title ;
   String? description ;
   DateTime? dateTime ;
-  bool? isDone;
+  bool isDone;
 
   Task({this.id="" ,
     required this.title ,
     required this.description ,
     required this.dateTime ,
-    this.isDone=false
+    required this.isDone,
   }
   );
 
